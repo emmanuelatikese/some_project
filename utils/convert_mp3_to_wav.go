@@ -24,6 +24,8 @@ func ConvertMP3ToWav(filename string) (string, error){
         return "", fmt.Errorf("error: %v", err);
     }
 
+    sampleRate := mp3Decoder.SampleRate();
+
 
     wavFile, err := os.Create("output.wav");
     if err != nil{
@@ -31,34 +33,34 @@ func ConvertMP3ToWav(filename string) (string, error){
     }
 
     wavEncoder := wav.NewEncoder(wavFile,
-            44100,           // Sample rate
+            sampleRate,           // Sample rate
             16,              // Bits per sample
             2,               // Number of channels
             1)              // WAV format (1 = PCM)
 
-    buf := make([]byte, 1024);
+    buf := make([]byte, 8192);
 
     audioBuf := &audio.IntBuffer{
         Format: &audio.Format{
             NumChannels: 2,
-            SampleRate: 44100,
+            SampleRate: sampleRate,
         },
     }
 
     for {
         n, err := mp3Decoder.Read(buf);
         if err != nil {
-            if err == io.EOF {
+            if err == io.EOF || n == 0 {
                 break
             }
             return "", fmt.Errorf("error: %v", err);
         }
 
-        fmt.Println(n);
 
         samples := make([]int, n/2)
-        for i := 0; i < n/2; i += 2 {
-            samples[i] = int(int16(buf[i]) | int16(buf[i+1])<<8)
+        for i := 0; i < n-1; i += 2 {
+                sample := int(int16(buf[i]) | int16(buf[i+1])<<8)
+                samples[i/2] = sample
         }
         
         audioBuf.Data = samples;

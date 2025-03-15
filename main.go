@@ -30,10 +30,12 @@ func init(){
 				return;
 			}
 
-			_,err = os.Open(filename)
+			File,err := os.Open(filename)
 			if !(os.IsExist(err))  {
 				fmt.Println("The filename:", filename, "has been converted to wav file.")
 			}
+
+			defer File.Close();
 	}
 
 
