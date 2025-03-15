@@ -68,5 +68,9 @@ func ConvertMP3ToWav(filename string) (string, error){
         }
     }
 
+    if err := wavEncoder.Close(); err != nil {
+        return "", fmt.Errorf("error: %v", err);
+    }
+
 	return "output.wav", nil;
 }
