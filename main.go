@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
+	algo "master_algo/algorithms"
 	other_funcs "master_algo/utils"
 	"os"
 	"strings"
+	"path/filepath"
 )
 
 var (
@@ -20,7 +22,8 @@ func init(){
 		return;
 	}
 
-	filename := os.Args[1];
+	filename = os.Args[1];
+	fmt.Println(filename)
 	// checking for mp3
 	if strings.HasSuffix(filename, ".mp3"){
 			// if mp3 convert to wav and remain the file name
@@ -29,13 +32,7 @@ func init(){
 				log.Println(err);
 				return;
 			}
-
-			File,err := os.Open(filename)
-			if !(os.IsExist(err))  {
-				fmt.Println("The filename:", filename, "has been converted to wav file.")
-			}
-
-			defer File.Close();
+			fmt.Println(filename + "is created")
 	}
 
 
@@ -48,5 +45,30 @@ func main (){
 	// function to convert magnitude of each frequencies to db
 	// function to create a csv file.
 	// if possible to can run a python file in golang if possible to get the actual virtual.
-	fmt.Println("Hello golang");
+
+	fmt.Println("the file name: " + filename)
+	dir, _ := os.Getwd();
+	filename = filepath.Join(dir, filename)
+	fmt.Println(filename)
+	wavFile, err := os.Open(filename);
+		if err != nil {
+			log.Println(err);
+			return;
+		}
+
+	defer wavFile.Close()
+
+
+	_, err = algo.GetXnFromWav(wavFile)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+
+	// // Print the first 20 samples
+	// fmt.Println("First 20 x(n):")
+	// for n := 0; n < 20 && n < len(samples); n++ {
+	// 	fmt.Printf("x(%d) = %.6f\n", n, samples[n])
+	// }
 }

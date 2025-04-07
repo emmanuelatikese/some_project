@@ -13,7 +13,7 @@ func ConvertMP3ToWav(filename string) (string, error){
 
     mp3File, err := os.Open(filename);
     if err != nil {
-        return "", fmt.Errorf("error: %v", err);
+        return "", fmt.Errorf("error: %v", err, filename);
         
     }
 
