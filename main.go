@@ -23,7 +23,6 @@ func init(){
 	}
 
 	filename = os.Args[1];
-	fmt.Println(filename)
 	// checking for mp3
 	if strings.HasSuffix(filename, ".mp3"){
 			// if mp3 convert to wav and remain the file name
@@ -46,10 +45,8 @@ func main (){
 	// function to create a csv file.
 	// if possible to can run a python file in golang if possible to get the actual virtual.
 
-	fmt.Println("the file name: " + filename)
 	dir, _ := os.Getwd();
 	filename = filepath.Join(dir, filename)
-	fmt.Println(filename)
 	wavFile, err := os.Open(filename);
 		if err != nil {
 			log.Println(err);
@@ -65,10 +62,5 @@ func main (){
 		return
 	}
 
-
-	// // Print the first 20 samples
-	// fmt.Println("First 20 x(n):")
-	// for n := 0; n < 20 && n < len(samples); n++ {
-	// 	fmt.Printf("x(%d) = %.6f\n", n, samples[n])
-	// }
+	
 }
